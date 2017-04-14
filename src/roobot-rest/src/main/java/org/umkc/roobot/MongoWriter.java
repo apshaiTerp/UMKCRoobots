@@ -35,14 +35,19 @@ public class MongoWriter {
     
     System.out.println ("[DEBUG] About to run person query");
     
-    List<BasicDBObject> foundDocument = (List<BasicDBObject>) collection.find(doc).into(new ArrayList<BasicDBObject>());
+    List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
     
     System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
     
     User getUser = null;
     if (foundDocument.size() > 0) {
-      for (BasicDBObject curDoc : foundDocument) {
-        getUser = new User(curDoc.toJson());
+      for (Document curDoc : foundDocument) {
+        getUser = new User();
+        getUser.setUserID(curDoc.getLong("userID"));
+        getUser.setUserName(curDoc.getString("userName"));
+        getUser.setFirstName(curDoc.getString("firstName"));
+        getUser.setLastName(curDoc.getString("lastName"));
+        getUser.setEmailAddress(curDoc.getString("emailAddress"));
       }
     }
     return getUser;
