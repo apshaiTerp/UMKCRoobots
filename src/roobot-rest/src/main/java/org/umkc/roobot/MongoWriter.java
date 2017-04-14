@@ -34,13 +34,13 @@ public class MongoWriter {
     
     System.out.println ("[DEBUG] About to run person query");
     
-    List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
+    List<BsonDocument> foundDocument = (List<BsonDocument>) collection.find(doc).into(new ArrayList<BsonDocument>());
     
     System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
     
     User getUser = null;
     if (foundDocument.size() > 0) {
-      for (Document curDoc : foundDocument) {
+      for (BsonDocument curDoc : foundDocument) {
         getUser = new User(curDoc.toJson());
       }
     }
