@@ -31,7 +31,12 @@ public class MongoWriter {
     MongoCollection collection = mongoDB.getCollection("users");
     BsonDocument doc = new BsonDocument();
     doc.append("userName", new BsonString(userName));
+    
+    System.out.println ("[DEBUG] About to run person query");
+    
     List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
+    
+    System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
     
     User getUser = null;
     if (foundDocument.size() > 0) {
