@@ -4,9 +4,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.umkc.roobot.MongoWriter;
 import org.umkc.roobot.message.LoginData;
 import org.umkc.roobot.message.SimpleErrorData;
-import org.umkc.roobot.message.SimpleMessageData;
+import org.umkc.roobot.model.User;
 
 /**
  * This class should process a login request.  This Endpoint should only support POST.
@@ -28,8 +29,11 @@ public class LoginController {
     if (loginData.getPassword() == null)
       return new SimpleErrorData("Login Error", "There was no login password provided");
     
-    //TODO - Need to Return Some User parameters after getting the object
-    
-    return new SimpleMessageData("SUCCESS", "I don't really work, but I don't fail either...");
+    //TODO - Check that password???
+    User user = MongoWriter.getUser(loginData.getUserName());
+    if (user == null)
+      return new SimpleErrorData("No User Found", "I could not find a record for " + loginData.getUserName());
+
+    return user;
   }
 }
