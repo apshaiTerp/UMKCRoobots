@@ -8,6 +8,7 @@ import org.bson.BsonString;
 import org.bson.Document;
 import org.umkc.roobot.model.User;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -34,13 +35,13 @@ public class MongoWriter {
     
     System.out.println ("[DEBUG] About to run person query");
     
-    List<BsonDocument> foundDocument = (List<BsonDocument>) collection.find(doc).into(new ArrayList<BsonDocument>());
+    List<BasicDBObject> foundDocument = (List<BasicDBObject>) collection.find(doc).into(new ArrayList<BasicDBObject>());
     
     System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
     
     User getUser = null;
     if (foundDocument.size() > 0) {
-      for (BsonDocument curDoc : foundDocument) {
+      for (BasicDBObject curDoc : foundDocument) {
         getUser = new User(curDoc.toJson());
       }
     }
