@@ -3,10 +3,13 @@ package org.umkc.roobot.model;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author AC010168
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class OutboxList {
 
   private List<OutboxEmailHeader> outboxList;
