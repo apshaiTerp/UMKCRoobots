@@ -14,8 +14,8 @@ import com.mongodb.MongoClient;
 @SpringBootApplication
 public class RoobotApplication {
   
-  private final static String MONGO_HOST = "192.168.1.177";
-  //private final static String MONGO_HOST = "localhost";
+  //private final static String MONGO_HOST = "192.168.1.177";
+  private final static String MONGO_HOST = "localhost";
   private final static int    MONGO_PORT = 27017;
 
   public static MongoClient mongo;
