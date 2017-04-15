@@ -20,13 +20,13 @@ import org.umkc.roobot.mongo.MongoHelper;
 public class EmailController {
 
   @RequestMapping(method=RequestMethod.GET, produces="application/json;charset=UTF-8")
-  public Object getEmail(@RequestParam(value="emailid", defaultValue="-1") long emailID) {
+  public Object getEmail(@RequestParam(value="id", defaultValue="-1") long emailID) {
     if (emailID < 0)
       return new SimpleErrorData("Invalid Parameters", "No valid emailid was provided");
     
     Email email = MongoHelper.getEmail(emailID);
     if (email == null)
-      return new SimpleErrorData("No Email Found", "I could not find a record for emailid " + emailID);
+      return new SimpleErrorData("No Email Found", "I could not find a record for email id " + emailID);
 
     return email;
   }
