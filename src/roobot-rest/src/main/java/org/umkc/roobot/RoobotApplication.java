@@ -4,6 +4,7 @@ import javax.annotation.PreDestroy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.umkc.roobot.mongo.MongoHelper;
 
 import com.mongodb.MongoClient;
 
@@ -27,7 +28,7 @@ public class RoobotApplication {
       mongo = new MongoClient(MONGO_HOST, MONGO_PORT);
       System.out.println ("[INFO] Mongo Connection Established.");
       
-      MongoWriter.init(mongo);
+      MongoHelper.init(mongo);
       
     } catch (Throwable t) {
       System.out.println ("I had problems opening the Mongo Client");
