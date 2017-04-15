@@ -13,6 +13,7 @@ import org.umkc.roobot.message.SimpleMessageData;
 import org.umkc.roobot.model.Email;
 import org.umkc.roobot.model.User;
 import org.umkc.roobot.mongo.MongoHelper;
+import org.umkc.roobot.parser.NattyParser;
 
 
 /**
@@ -58,14 +59,27 @@ public class EmailController {
     //Try to find the userIDs for the sender/recipient
     List<User> allUsers = MongoHelper.getAllUsers();
     
+    User sender = null;
     if (email.getSenderID() < 0 || email.getRecipientID() < 0) {
       for (User curUser : allUsers) {
-        if (curUser.getEmailAddress().equalsIgnoreCase(email.getSender()))
+        if (curUser.getEmailAddress().equalsIgnoreCase(email.getSender())) {
           email.setSenderID(curUser.getUserID());
+          sender = curUser;
+        }
         if (curUser.getEmailAddress().equalsIgnoreCase(email.getRecipient()))
-          email.setSenderID(curUser.getUserID());
+          email.setRecipientID(curUser.getUserID());
       }
     }
+    
+    email.setEmailID(MongoHelper.getNextEmailID());
+    
+    //TODO - Add in the parsing for dates and building the return data
+    NattyParser parser = new NattyParser();
+    parser.parseEmailBody(email, sender);
+    
+    email.setProcessedMessage(parser.getResultString());
+    email.setCalHints(parser.getCalHints());
+    
     MongoHelper.writeEmail(email);
     
     return new SimpleMessageData("Email Delivered", "This email has been received.");

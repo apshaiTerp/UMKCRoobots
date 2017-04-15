@@ -8,6 +8,7 @@ import org.bson.BsonDocument;
 import org.bson.BsonInt64;
 import org.bson.BsonString;
 import org.bson.Document;
+import org.umkc.roobot.model.CalEvent;
 import org.umkc.roobot.model.Email;
 import org.umkc.roobot.model.InboxEmailHeader;
 import org.umkc.roobot.model.InboxList;
@@ -34,6 +35,7 @@ public class MongoHelper {
   private static MongoDatabase mongoDB;
   
   private static long maxEmailID = -1L;
+  private static long maxEventID = -1L;
   
   public static void init(MongoClient mongo) {
     mongoDB = mongo.getDatabase(DB_NAME);
@@ -117,15 +119,25 @@ public class MongoHelper {
     return getEmail;
   }
   
+  public static long getNextEmailID() {
+    if (maxEmailID < 0)
+      maxEmailID = getMaxEmailID();
+    maxEmailID++;
+    return maxEmailID;
+  }
+  
+  public static long getNextEventID() {
+    if (maxEventID < 0)
+      maxEventID = getMaxEventID();
+    maxEventID++;
+    return maxEventID;
+  }
+  
   public static void writeEmail(Email email) {
     MongoCollection collection = mongoDB.getCollection("emails");
     Document doc = new Document();
     
-    if (maxEmailID < 0)
-      maxEmailID = getMaxEmailID();
-    maxEmailID++;
-    
-    doc.append("emailID", new BsonInt64(maxEmailID));
+    doc.append("emailID", new BsonInt64(email.getEmailID()));
     doc.append("sender", new BsonString(email.getSender()));
     if (email.getSenderID() > 0) doc.append("senderID", new BsonInt64(email.getSenderID()));
     doc.append("recipient", new BsonString(email.getRecipient()));
@@ -133,7 +145,28 @@ public class MongoHelper {
     doc.append("subject", new BsonString(email.getSubject()));
     doc.append("dateSent", new BsonDateTime(email.getDateSent().getTime()));
     doc.append("messageBody", new BsonString(email.getMessageBody()));
-    //Deliberately omit processed message at this time.
+    doc.append("processedMessage", new BsonString(email.getProcessedMessage()));
+    
+    BsonDocument[] events = new BsonDocument[email.getCalHints().size()];
+    int pos = 0;
+    for (CalEvent event : email.getCalHints()) {
+      BsonDocument bDoc = new BsonDocument();
+      
+      bDoc.append("eventID", new BsonInt64(event.getEventID()));
+      bDoc.append("origEmailID", new BsonInt64(event.getOrigEmailID()));
+      bDoc.append("hostUserID", new BsonInt64(event.getHostUserID()));
+      
+      bDoc.append("date", new BsonString(event.getDate() == null ? "" : event.getDate()));
+      bDoc.append("time", new BsonString(event.getTime() == null ? "" : event.getTime()));
+      bDoc.append("meetWithName", new BsonString(event.getMeetWithName() == null ? "" : event.getMeetWithName()));
+      bDoc.append("meetWithAddress", new BsonString(event.getMeetWithAddress() == null ? "" : event.getMeetWithAddress()));
+      bDoc.append("subject", new BsonString(event.getSubject() == null ? "" : event.getSubject()));
+      bDoc.append("eventNotes", new BsonString(event.getEventNotes() == null ? "" : event.getEventNotes()));
+      events[pos] = bDoc;
+      pos++;
+    }
+    doc.append("calHints", events);
+    
     collection.insertOne(doc);
   }
   
@@ -150,6 +183,14 @@ public class MongoHelper {
     FindIterable iter = collection.find().sort(new BasicDBObject("emailID", -1)).limit(1);
     Document doc = (Document)iter.first();
     long emailID = doc.getLong("emailID");
+    return emailID;
+  }
+  
+  public static long getMaxEventID() {
+    MongoCollection collection = mongoDB.getCollection("calhint");
+    FindIterable iter = collection.find().sort(new BasicDBObject("eventID", -1)).limit(1);
+    Document doc = (Document)iter.first();
+    long emailID = doc.getLong("eventID");
     return emailID;
   }
   
@@ -193,4 +234,100 @@ public class MongoHelper {
     return list;
   }
   
+  public static CalEvent getEventHint(long eventID) {
+    MongoCollection collection = mongoDB.getCollection("calhint");
+    BsonDocument doc = new BsonDocument();
+    doc.append("senderID", new BsonInt64(eventID));
+   
+    System.out.println ("[DEBUG] About to run calhint query");
+    
+    List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
+    
+    System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
+
+    CalEvent getEvent = null;
+    if (foundDocument.size() > 0) {
+      for (Document curDoc : foundDocument) {
+        getEvent = new CalEvent();
+        getEvent.setEventID(curDoc.getLong("eventID"));
+        getEvent.setOrigEmailID(curDoc.getLong("origEmailID"));
+        getEvent.setHostUserID(curDoc.getLong("hostUserID"));
+        getEvent.setDate(curDoc.getString("date"));
+        getEvent.setTime(curDoc.getString("time"));
+        getEvent.setMeetWithName(curDoc.getString("meetWithName"));
+        getEvent.setMeetWithAddress(curDoc.getString("meetWithAddress"));
+        getEvent.setSubject(curDoc.getString("subject"));
+        getEvent.setEventNotes(curDoc.getString("eventNotes"));
+      }
+    }
+    
+    return getEvent;
+  }
+
+  public static CalEvent getEvent(long eventID) {
+    MongoCollection collection = mongoDB.getCollection("calevent");
+    BsonDocument doc = new BsonDocument();
+    doc.append("senderID", new BsonInt64(eventID));
+   
+    System.out.println ("[DEBUG] About to run calevent query");
+    
+    List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
+    
+    System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
+
+    CalEvent getEvent = null;
+    if (foundDocument.size() > 0) {
+      for (Document curDoc : foundDocument) {
+        getEvent = new CalEvent();
+        getEvent.setEventID(curDoc.getLong("eventID"));
+        getEvent.setOrigEmailID(curDoc.getLong("origEmailID"));
+        getEvent.setHostUserID(curDoc.getLong("hostUserID"));
+        getEvent.setDate(curDoc.getString("date"));
+        getEvent.setTime(curDoc.getString("time"));
+        getEvent.setMeetWithName(curDoc.getString("meetWithName"));
+        getEvent.setMeetWithAddress(curDoc.getString("meetWithAddress"));
+        getEvent.setSubject(curDoc.getString("subject"));
+        getEvent.setEventNotes(curDoc.getString("eventNotes"));
+      }
+    }
+    
+    return getEvent;
+  }
+
+  public static void writeCalHint(CalEvent event) {
+    MongoCollection collection = mongoDB.getCollection("calhint");
+    Document doc = new Document();
+    
+    doc.append("eventID", new BsonInt64(event.getEventID()));
+    doc.append("origEmailID", new BsonInt64(event.getOrigEmailID()));
+    doc.append("hostUserID", new BsonInt64(event.getHostUserID()));
+    
+    doc.append("date", new BsonString(event.getDate() == null ? "" : event.getDate()));
+    doc.append("time", new BsonString(event.getTime() == null ? "" : event.getTime()));
+    doc.append("meetWithName", new BsonString(event.getMeetWithName() == null ? "" : event.getMeetWithName()));
+    doc.append("meetWithAddress", new BsonString(event.getMeetWithAddress() == null ? "" : event.getMeetWithAddress()));
+    doc.append("subject", new BsonString(event.getSubject() == null ? "" : event.getSubject()));
+    doc.append("eventNotes", new BsonString(event.getEventNotes() == null ? "" : event.getEventNotes()));
+    
+    collection.insertOne(doc);
+  }
+  
+  public static void writeCalEvent(CalEvent event) {
+    MongoCollection collection = mongoDB.getCollection("calevent");
+    Document doc = new Document();
+    
+    doc.append("eventID", new BsonInt64(event.getEventID()));
+    doc.append("origEmailID", new BsonInt64(event.getOrigEmailID()));
+    doc.append("hostUserID", new BsonInt64(event.getHostUserID()));
+    
+    doc.append("date", new BsonString(event.getDate() == null ? "" : event.getDate()));
+    doc.append("time", new BsonString(event.getTime() == null ? "" : event.getTime()));
+    doc.append("meetWithName", new BsonString(event.getMeetWithName() == null ? "" : event.getMeetWithName()));
+    doc.append("meetWithAddress", new BsonString(event.getMeetWithAddress() == null ? "" : event.getMeetWithAddress()));
+    doc.append("subject", new BsonString(event.getSubject() == null ? "" : event.getSubject()));
+    doc.append("eventNotes", new BsonString(event.getEventNotes() == null ? "" : event.getEventNotes()));
+    
+    collection.insertOne(doc);
+  }
+
 }

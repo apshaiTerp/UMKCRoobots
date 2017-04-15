@@ -2,6 +2,8 @@ package org.umkc.roobot.model;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -25,6 +27,8 @@ public class Email {
   private String messageBody;
   private String processedMessage;
   
+  private List<CalEvent> calHints;
+  
   public Email() {
     emailID          = -1L;
     sender           = null;
@@ -35,6 +39,7 @@ public class Email {
     dateSent         = null;
     messageBody      = null;
     processedMessage = null;
+    calHints         = new LinkedList<CalEvent>();
   }
   
   public Email(String jsonString) {
@@ -51,6 +56,7 @@ public class Email {
       dateSent         = jsonData.dateSent;
       messageBody      = jsonData.messageBody;
       processedMessage = jsonData.processedMessage;
+      calHints         = jsonData.calHints;
     } catch (JsonParseException jpe) {
       jpe.printStackTrace();
     } catch (JsonMappingException jme) {
@@ -184,6 +190,20 @@ public class Email {
    */
   public void setProcessedMessage(String processedMessage) {
     this.processedMessage = processedMessage;
+  }
+
+  /**
+   * @return the calHints
+   */
+  public List<CalEvent> getCalHints() {
+    return calHints;
+  }
+
+  /**
+   * @param calHints the calHints to set
+   */
+  public void setCalHints(List<CalEvent> calHints) {
+    this.calHints = calHints;
   }
 
 }

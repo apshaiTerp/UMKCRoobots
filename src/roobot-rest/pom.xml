@@ -18,14 +18,6 @@
                 <role>developer</role>
             </roles>
         </developer>
-        <developer>
-            <id>bcapps</id>
-            <name>Billy Capps</name>
-            <email>bjctgc@mail.umkc.edu</email>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </developer>
     </developers>
 
     <scm>
@@ -74,13 +66,19 @@
             <artifactId>json-path</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <dependency> 
+            <groupId>com.joestelmach</groupId>
+            <artifactId>natty</artifactId>
+            <version>0.13</version>
+        </dependency>
 
-		<!-- Test Dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+		    <!-- Test Dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
