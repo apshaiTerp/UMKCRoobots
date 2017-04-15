@@ -114,7 +114,7 @@ public class MongoHelper {
   
   public static void writeEmail(Email email) {
     MongoCollection collection = mongoDB.getCollection("emails");
-    BsonDocument doc = new BsonDocument();
+    Document doc = new Document();
     
     if (maxEmailID < 0)
       maxEmailID = getMaxEmailID();
