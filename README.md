@@ -1,2 +1,2 @@
 # UMKCRoobots
-Starter Folder for UMKC Hackathon Submissioni
+Starter Folder for UMKC Hackathon Submission
