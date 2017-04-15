@@ -56,7 +56,7 @@ public class MongoHelper {
   
   @SuppressWarnings({ "rawtypes", "unchecked" })
   public static Email getEmail(long emailID) {
-    MongoCollection collection = mongoDB.getCollection("users");
+    MongoCollection collection = mongoDB.getCollection("emails");
     BsonDocument doc = new BsonDocument();
     doc.append("emailID", new BsonInt64(emailID));
     
