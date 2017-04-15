@@ -9,15 +9,21 @@ import org.bson.BsonString;
 import org.bson.Document;
 import org.umkc.roobot.model.Email;
 import org.umkc.roobot.model.User;
+import org.umkc.roobot.message.SimpleMessageData;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
 /**
  * @author AC010168
  *
  */
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class MongoHelper {
 
   private final static String DB_NAME = "roobotdb";
@@ -28,7 +34,6 @@ public class MongoHelper {
     mongoDB = mongo.getDatabase(DB_NAME);
   }
   
-  @SuppressWarnings({ "rawtypes", "unchecked" })
   public static User getUser(String userName) {
     MongoCollection collection = mongoDB.getCollection("users");
     BsonDocument doc = new BsonDocument();
@@ -54,7 +59,29 @@ public class MongoHelper {
     return getUser;
   }
   
-  @SuppressWarnings({ "rawtypes", "unchecked" })
+  public static List<User> getAllUsers() {
+    MongoCollection collection = mongoDB.getCollection("users");
+    System.out.println ("[DEBUG] About to run get all users query");
+    
+    List<Document> foundDocument = (List<Document>) collection.find().into(new ArrayList<Document>());
+    
+    System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
+    
+    List<User> allUsers = new ArrayList<User>(foundDocument.size());
+    if (foundDocument.size() > 0) {
+      for (Document curDoc : foundDocument) {
+        User getUser = new User();
+        getUser.setUserID(curDoc.getLong("userID"));
+        getUser.setUserName(curDoc.getString("userName"));
+        getUser.setFirstName(curDoc.getString("firstName"));
+        getUser.setLastName(curDoc.getString("lastName"));
+        getUser.setEmailAddress(curDoc.getString("emailAddress"));
+        allUsers.add(getUser);
+      }
+    }
+    return allUsers;
+  }
+  
   public static Email getEmail(long emailID) {
     MongoCollection collection = mongoDB.getCollection("emails");
     BsonDocument doc = new BsonDocument();
@@ -83,5 +110,23 @@ public class MongoHelper {
     }
     
     return getEmail;
+  }
+  
+  public static Object writeEmail(Email email) {
+    MongoCollection collection = mongoDB.getCollection("emails");
+    BsonDocument doc = new BsonDocument();
+    
+    
+    
+    
+    return new SimpleMessageData("Email Delivered", "This email has been received.");
+  }
+  
+  public static long getMaxEmailID() {
+    MongoCollection collection = mongoDB.getCollection("emails");
+    FindIterable iter = collection.find().sort(new BasicDBObject("emailID", -1)).limit(1);
+    Document doc = (Document)iter.first();
+    long emailID = doc.getLong("emailID");
+    return emailID;
   }
 }
