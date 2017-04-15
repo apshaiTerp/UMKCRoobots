@@ -9,12 +9,17 @@ import org.bson.BsonInt64;
 import org.bson.BsonString;
 import org.bson.Document;
 import org.umkc.roobot.model.Email;
+import org.umkc.roobot.model.InboxEmailHeader;
+import org.umkc.roobot.model.InboxList;
+import org.umkc.roobot.model.OutboxEmailHeader;
+import org.umkc.roobot.model.OutboxList;
 import org.umkc.roobot.model.User;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
 /**
@@ -128,7 +133,7 @@ public class MongoHelper {
     doc.append("subject", new BsonString(email.getSubject()));
     doc.append("dateSent", new BsonDateTime(email.getDateSent().getTime()));
     doc.append("messageBody", new BsonString(email.getMessageBody()));
-    //Deliberarly omit processed message at this time.
+    //Deliberately omit processed message at this time.
     collection.insertOne(doc);
   }
   
@@ -147,4 +152,45 @@ public class MongoHelper {
     long emailID = doc.getLong("emailID");
     return emailID;
   }
+  
+  public static InboxList getUserInbox(long userID, int limit) {
+    MongoCollection collection = mongoDB.getCollection("emails");
+    BsonDocument doc = new BsonDocument();
+    doc.append("recipientID", new BsonInt64(userID));
+
+    FindIterable iter = collection.find(doc).sort(new BasicDBObject("dateSent", -1)).limit(limit);
+    MongoCursor cursor = iter.iterator();
+    InboxList list = new InboxList();
+    while (cursor.hasNext()) {
+      Document curDoc = (Document)cursor.next();
+      InboxEmailHeader getEmail = new InboxEmailHeader();
+      getEmail.setEmailID(curDoc.getLong("emailID"));
+      getEmail.setSender(curDoc.getString("sender"));
+      getEmail.setSubject(curDoc.getString("subject"));
+      getEmail.setDateSent(curDoc.getDate("dateSent"));
+      list.addEmailHeader(getEmail);
+    }
+    return list;
+  }
+  
+  public static OutboxList getUserOutbox(long userID, int limit) {
+    MongoCollection collection = mongoDB.getCollection("emails");
+    BsonDocument doc = new BsonDocument();
+    doc.append("senderID", new BsonInt64(userID));
+
+    FindIterable iter = collection.find(doc).sort(new BasicDBObject("dateSent", -1)).limit(limit);
+    MongoCursor cursor = iter.iterator();
+    OutboxList list = new OutboxList();
+    while (cursor.hasNext()) {
+      Document curDoc = (Document)cursor.next();
+      OutboxEmailHeader getEmail = new OutboxEmailHeader();
+      getEmail.setEmailID(curDoc.getLong("emailID"));
+      getEmail.setRecipient(curDoc.getString("recipient"));
+      getEmail.setSubject(curDoc.getString("subject"));
+      getEmail.setDateSent(curDoc.getDate("dateSent"));
+      list.addEmailHeader(getEmail);
+    }
+    return list;
+  }
+  
 }
