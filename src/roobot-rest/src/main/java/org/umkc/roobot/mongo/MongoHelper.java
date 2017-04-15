@@ -3,20 +3,18 @@ package org.umkc.roobot.mongo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.BsonDateTime;
 import org.bson.BsonDocument;
 import org.bson.BsonInt64;
 import org.bson.BsonString;
 import org.bson.Document;
 import org.umkc.roobot.model.Email;
 import org.umkc.roobot.model.User;
-import org.umkc.roobot.message.SimpleMessageData;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 
 /**
@@ -29,6 +27,8 @@ public class MongoHelper {
   private final static String DB_NAME = "roobotdb";
   
   private static MongoDatabase mongoDB;
+  
+  private static long maxEmailID = -1L;
   
   public static void init(MongoClient mongo) {
     mongoDB = mongo.getDatabase(DB_NAME);
@@ -112,14 +112,24 @@ public class MongoHelper {
     return getEmail;
   }
   
-  public static Object writeEmail(Email email) {
+  public static void writeEmail(Email email) {
     MongoCollection collection = mongoDB.getCollection("emails");
     BsonDocument doc = new BsonDocument();
     
+    if (maxEmailID < 0)
+      maxEmailID = getMaxEmailID();
+    maxEmailID++;
     
-    
-    
-    return new SimpleMessageData("Email Delivered", "This email has been received.");
+    doc.append("emailID", new BsonInt64(maxEmailID));
+    doc.append("sender", new BsonString(email.getSender()));
+    if (email.getSenderID() > 0) doc.append("senderID", new BsonInt64(email.getSenderID()));
+    doc.append("recipient", new BsonString(email.getRecipient()));
+    if (email.getRecipientID() > 0) doc.append("recipientID", new BsonInt64(email.getRecipientID()));
+    doc.append("subject", new BsonString(email.getSender()));
+    doc.append("dateSent", new BsonDateTime(email.getDateSent().getTime()));
+    doc.append("messageBody", new BsonString(email.getSender()));
+    //Deliberarly omit processed message at this time.
+    collection.insertOne(doc);
   }
   
   public static long getMaxEmailID() {

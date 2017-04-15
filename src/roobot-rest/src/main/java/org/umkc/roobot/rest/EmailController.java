@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.umkc.roobot.message.SimpleErrorData;
+import org.umkc.roobot.message.SimpleMessageData;
 import org.umkc.roobot.model.Email;
 import org.umkc.roobot.model.User;
 import org.umkc.roobot.mongo.MongoHelper;
@@ -28,8 +29,6 @@ public class EmailController {
   public Object getEmail(@RequestParam(value="id", defaultValue="-1") long emailID) {
     if (emailID < 0)
       return new SimpleErrorData("Invalid Parameters", "No valid emailid was provided");
-    
-    System.out.println ("[DEBUG] Max EmailID: " + MongoHelper.getMaxEmailID());
     
     Email email = MongoHelper.getEmail(emailID);
     if (email == null)
@@ -67,8 +66,9 @@ public class EmailController {
           email.setSenderID(curUser.getUserID());
       }
     }
+    MongoHelper.writeEmail(email);
     
-    return null;
+    return new SimpleMessageData("Email Delivered", "This email has been received.");
   }
 
 }
