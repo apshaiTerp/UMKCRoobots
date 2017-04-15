@@ -15,7 +15,7 @@ import org.umkc.roobot.mongo.MongoHelper;
  *
  */
 @RestController
-@RequestMapping("/calhint")
+@RequestMapping("/calevent")
 public class CalEventController {
 
   @RequestMapping(method=RequestMethod.GET, produces="application/json;charset=UTF-8")
