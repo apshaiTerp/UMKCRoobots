@@ -147,10 +147,10 @@ public class MongoHelper {
     doc.append("messageBody", new BsonString(email.getMessageBody()));
     doc.append("processedMessage", new BsonString(email.getProcessedMessage()));
     
-    BsonDocument[] events = new BsonDocument[email.getCalHints().size()];
+    Document[] events = new Document[email.getCalHints().size()];
     int pos = 0;
     for (CalEvent event : email.getCalHints()) {
-      BsonDocument bDoc = new BsonDocument();
+      Document bDoc = new Document();
       
       bDoc.append("eventID", new BsonInt64(event.getEventID()));
       bDoc.append("origEmailID", new BsonInt64(event.getOrigEmailID()));
