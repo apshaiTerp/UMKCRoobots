@@ -70,5 +70,16 @@ public class EmailController {
     
     return new SimpleMessageData("Email Delivered", "This email has been received.");
   }
+  
+  @RequestMapping(method=RequestMethod.DELETE, produces="application/json;charset=UTF-8")
+  public Object deleteEmail(@RequestBody Email email) {
+    if (email == null)
+      return new SimpleErrorData("Delete Error", "There was no valid email data provided");
+    if (email.getEmailID() <= 0)
+      return new SimpleErrorData("Delete Error", "There was no valid email data provided");
+      
+    MongoHelper.deleteEmail(email.getEmailID());
+    return new SimpleMessageData("Email Deleted", "This email has been deleted.");
+  }
 
 }

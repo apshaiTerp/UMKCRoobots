@@ -132,6 +132,14 @@ public class MongoHelper {
     collection.insertOne(doc);
   }
   
+  public static void deleteEmail(long emailID) {
+    MongoCollection collection = mongoDB.getCollection("emails");
+    Document doc = new Document();
+    doc.append("emailID", new BsonInt64(emailID));
+    
+    collection.deleteOne(doc);
+  }
+  
   public static long getMaxEmailID() {
     MongoCollection collection = mongoDB.getCollection("emails");
     FindIterable iter = collection.find().sort(new BasicDBObject("emailID", -1)).limit(1);
