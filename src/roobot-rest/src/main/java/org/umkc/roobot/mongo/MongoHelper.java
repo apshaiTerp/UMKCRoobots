@@ -125,9 +125,9 @@ public class MongoHelper {
     if (email.getSenderID() > 0) doc.append("senderID", new BsonInt64(email.getSenderID()));
     doc.append("recipient", new BsonString(email.getRecipient()));
     if (email.getRecipientID() > 0) doc.append("recipientID", new BsonInt64(email.getRecipientID()));
-    doc.append("subject", new BsonString(email.getSender()));
+    doc.append("subject", new BsonString(email.getSubject()));
     doc.append("dateSent", new BsonDateTime(email.getDateSent().getTime()));
-    doc.append("messageBody", new BsonString(email.getSender()));
+    doc.append("messageBody", new BsonString(email.getMessageBody()));
     //Deliberarly omit processed message at this time.
     collection.insertOne(doc);
   }
