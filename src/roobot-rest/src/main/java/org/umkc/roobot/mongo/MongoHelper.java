@@ -190,8 +190,8 @@ public class MongoHelper {
     MongoCollection collection = mongoDB.getCollection("calhint");
     FindIterable iter = collection.find().sort(new BasicDBObject("eventID", -1)).limit(1);
     Document doc = (Document)iter.first();
-    long emailID = doc.getLong("eventID");
-    return emailID;
+    if (doc != null) return doc.getLong("eventID");
+    return 1;
   }
   
   public static InboxList getUserInbox(long userID, int limit) {
