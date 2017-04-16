@@ -13,9 +13,7 @@ Project Submission for UMKC Hackathon Spring 2017
 
 For our project, we chose the CoxAutomotive/VinSolutions Problem, which presented the following use case:
 
-```
-Natural Language Processing (NLP) has many uses in both academia and the business world. Parsing the user messages/mails could be one of the applications. We would like you to develop an appointment detection system just like the one you see in smartphones from GMAIL and Office 365. The goal is to allow the user to type a message to another user. When that user opens the message content via a browser, the system should detect texts that infer a meeting invitation.
-```
+* Natural Language Processing (NLP) has many uses in both academia and the business world. Parsing the user messages/mails could be one of the applications. We would like you to develop an appointment detection system just like the one you see in smartphones from GMAIL and Office 365. The goal is to allow the user to type a message to another user. When that user opens the message content via a browser, the system should detect texts that infer a meeting invitation.
 
 This problem statement defined the following tasks:
 * The application should allow users to type a message to a different user.
