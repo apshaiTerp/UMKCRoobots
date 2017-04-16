@@ -1,0 +1,29 @@
+In case the REST service crashes, here is what you need to get the service back up and running on another server:
+
+Pre-Requisites:
+Java 8 JRE/JDK installed
+Maven 3 installed (I've run against 3.2.5 and 3.3.9)
+MongoDB Version 3.4.3
+ - You can download your OS-specific flavor here: https://www.mongodb.com/download-center#community
+
+Once all of those things are installed, you need to launch mongod (the database engine)
+You can just run 'mongod' from the command prompt, which assumes your database folder location is at /data/db,
+or you can route it somewhere specific like this:
+
+mongod --dbpath /home/adam/stuff/mongo/db --port 27017
+(NOTE: Will need to run with sudo on Linux/Ubuntu)
+
+The REST service is built with Maven, so to build it yourself, you only need to run the following command:
+mvn clean install
+
+This should create your war file under UMKCRoobot/src/roobot-rest/target/roobot-rest-0.9.0.war
+To launch this again locally, you can run the following command:
+
+java -jar <your path to>/roobot-rest-0.9.0.war
+
+With that done, assuming your ports are open to the world, you can then host the service yourself.
+The rest service does assume Mongo is running against localhost, so for that reason it can't be deployed
+on something like Heroku.  Not sure why the mongo connection is so finicky (It's not the client that can't
+connect, it's the host who refuses).
+
+So, in case we wind up in trouble and have to move the server somewhere else, here's how.
