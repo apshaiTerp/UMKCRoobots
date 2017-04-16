@@ -30,6 +30,7 @@ Our solution comprises the following elements:
 * Web Client using HTML5, CSS, Javascript, and whatever else we are using
 
 The REST API is documented on the project wiki site [here](https://github.com/apshaiTerp/UMKCRoobots/wiki/REST-API).
+
 For alternative approach using Python Parser, a brief documentation on the project wiki site is [here](https://github.com/apshaiTerp/UMKCRoobots/wiki/NLP-Data-Parsing-Alternative-Approach).
 # TODO
 
