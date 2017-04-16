@@ -285,7 +285,7 @@ public class MongoHelper {
   public static CalEvent getEvent(long eventID) {
     MongoCollection collection = mongoDB.getCollection("calevent");
     BsonDocument doc = new BsonDocument();
-    doc.append("senderID", new BsonInt64(eventID));
+    doc.append("eventID", new BsonInt64(eventID));
    
     System.out.println ("[DEBUG] About to run calevent query");
     
