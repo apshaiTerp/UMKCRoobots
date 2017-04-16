@@ -20,6 +20,8 @@ public class InboxController {
   @RequestMapping(method=RequestMethod.GET, produces="application/json;charset=UTF-8")
   public Object getInbox(@RequestParam(value="id", defaultValue="-1") long userID,
                          @RequestParam(value="limit", defaultValue="20") int limit) {
+    System.out.println ("[DEBUG - " + new java.util.Date() + "] - Executing GET /inbox");
+
     if (userID < 0)
       return new SimpleErrorData("Invalid Parameters", "No valid user ID was provided");
    

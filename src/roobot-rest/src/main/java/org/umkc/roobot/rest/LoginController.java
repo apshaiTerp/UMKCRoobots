@@ -21,6 +21,8 @@ public class LoginController {
 
   @RequestMapping(method=RequestMethod.POST, consumes = "application/json;charset=UTF-8", produces="application/json;charset=UTF-8")
   public Object doLogin(@RequestBody LoginData loginData) {
+    System.out.println ("[DEBUG - " + new java.util.Date() + "] - Executing POST /login");
+
     //Check basic data integrity
     if (loginData == null)
       return new SimpleErrorData("Login Error", "There was no valid login data provided");

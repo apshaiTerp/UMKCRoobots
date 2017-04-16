@@ -29,6 +29,8 @@ public class EmailController {
 
   @RequestMapping(method=RequestMethod.GET, produces="application/json;charset=UTF-8")
   public Object getEmail(@RequestParam(value="id", defaultValue="-1") long emailID) {
+    System.out.println ("[DEBUG - " + new java.util.Date() + "] - Executing GET /email");
+
     if (emailID < 0)
       return new SimpleErrorData("Invalid Parameters", "No valid emailid was provided");
     
@@ -41,6 +43,8 @@ public class EmailController {
 
   @RequestMapping(method=RequestMethod.POST, consumes = "application/json;charset=UTF-8", produces="application/json;charset=UTF-8")
   public Object postEmail(@RequestBody Email email) {
+    System.out.println ("[DEBUG - " + new java.util.Date() + "] - Executing POST /email");
+
     if (email == null)
       return new SimpleErrorData("Send Error", "There was no valid email data provided");
 
@@ -74,7 +78,7 @@ public class EmailController {
     
     email.setEmailID(MongoHelper.getNextEmailID());
     
-    //TODO - Add in the parsing for dates and building the return data
+    //Add in the parsing for dates and building the return data
     NattyParser parser = new NattyParser();
     parser.parseEmailBody(email, sender);
     
@@ -91,6 +95,8 @@ public class EmailController {
   
   @RequestMapping(method=RequestMethod.DELETE, produces="application/json;charset=UTF-8")
   public Object deleteEmail(@RequestBody Email email) {
+    System.out.println ("[DEBUG - " + new java.util.Date() + "] - Executing DELETE /email");
+
     if (email == null)
       return new SimpleErrorData("Delete Error", "There was no valid email data provided");
     if (email.getEmailID() <= 0)

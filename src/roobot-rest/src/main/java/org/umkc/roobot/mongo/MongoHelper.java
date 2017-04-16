@@ -47,11 +47,7 @@ public class MongoHelper {
     BsonDocument doc = new BsonDocument();
     doc.append("userName", new BsonString(userName));
     
-    System.out.println ("[DEBUG] About to run person query");
-    
     List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
-    
-    System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
     
     User getUser = null;
     if (foundDocument.size() > 0) {
@@ -69,11 +65,8 @@ public class MongoHelper {
   
   public static List<User> getAllUsers() {
     MongoCollection collection = mongoDB.getCollection("users");
-    System.out.println ("[DEBUG] About to run get all users query");
     
     List<Document> foundDocument = (List<Document>) collection.find().into(new ArrayList<Document>());
-    
-    System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
     
     List<User> allUsers = new ArrayList<User>(foundDocument.size());
     if (foundDocument.size() > 0) {
@@ -95,12 +88,8 @@ public class MongoHelper {
     BsonDocument doc = new BsonDocument();
     doc.append("emailID", new BsonInt64(emailID));
     
-    System.out.println ("[DEBUG] About to run email query");
-    
     List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
     
-    System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
-
     Email getEmail = null;
     if (foundDocument.size() > 0) {
       for (Document curDoc : foundDocument) {
@@ -257,12 +246,8 @@ public class MongoHelper {
     BsonDocument doc = new BsonDocument();
     doc.append("senderID", new BsonInt64(eventID));
    
-    System.out.println ("[DEBUG] About to run calhint query");
-    
     List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
     
-    System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
-
     CalEvent getEvent = null;
     if (foundDocument.size() > 0) {
       for (Document curDoc : foundDocument) {
@@ -287,12 +272,8 @@ public class MongoHelper {
     BsonDocument doc = new BsonDocument();
     doc.append("eventID", new BsonInt64(eventID));
    
-    System.out.println ("[DEBUG] About to run calevent query");
-    
     List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
     
-    System.out.println ("[DEBUG] Got some results: " + foundDocument.size());
-
     CalEvent getEvent = null;
     if (foundDocument.size() > 0) {
       for (Document curDoc : foundDocument) {
@@ -311,6 +292,34 @@ public class MongoHelper {
     
     return getEvent;
   }
+  
+  public static List<CalEvent> getEventsByUser(long userID) {
+    MongoCollection collection = mongoDB.getCollection("calevent");
+    BsonDocument doc = new BsonDocument();
+    doc.append("hostUserID", new BsonInt64(userID));
+    
+    List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
+    
+    List<CalEvent> allEvents = new ArrayList<CalEvent>(foundDocument.size());
+    if (foundDocument.size() > 0) {
+      for (Document curDoc : foundDocument) {
+        CalEvent getEvent = new CalEvent();
+        getEvent.setEventID(curDoc.getLong("eventID"));
+        getEvent.setOrigEmailID(curDoc.getLong("origEmailID"));
+        getEvent.setHostUserID(curDoc.getLong("hostUserID"));
+        getEvent.setDate(curDoc.getString("date"));
+        getEvent.setTime(curDoc.getString("time"));
+        getEvent.setMeetWithName(curDoc.getString("meetWithName"));
+        getEvent.setMeetWithAddress(curDoc.getString("meetWithAddress"));
+        getEvent.setSubject(curDoc.getString("subject"));
+        getEvent.setEventNotes(curDoc.getString("eventNotes"));
+        allEvents.add(getEvent);
+      }
+    }
+    
+    return allEvents;
+  }
+
 
   public static void writeCalHint(CalEvent event) {
     MongoCollection collection = mongoDB.getCollection("calhint");

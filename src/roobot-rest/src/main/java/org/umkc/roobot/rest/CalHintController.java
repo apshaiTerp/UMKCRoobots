@@ -18,6 +18,8 @@ public class CalHintController {
   
   @RequestMapping(method=RequestMethod.GET, produces="application/json;charset=UTF-8")
   public Object getHint(@RequestParam(value="id", defaultValue="-1") long hintID) {
+    System.out.println ("[DEBUG - " + new java.util.Date() + "] - Executing GET /calhint");
+    
     if (hintID < 0)
       return new SimpleErrorData("Invalid Parameters", "No valid calevent ID was provided");
 
