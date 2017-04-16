@@ -244,7 +244,7 @@ public class MongoHelper {
   public static CalEvent getEventHint(long eventID) {
     MongoCollection collection = mongoDB.getCollection("calhint");
     BsonDocument doc = new BsonDocument();
-    doc.append("senderID", new BsonInt64(eventID));
+    doc.append("eventID", new BsonInt64(eventID));
    
     List<Document> foundDocument = (List<Document>) collection.find(doc).into(new ArrayList<Document>());
     
