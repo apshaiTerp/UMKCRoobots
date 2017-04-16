@@ -116,21 +116,23 @@ public class MongoHelper {
         getEmail.setProcessedMessage(curDoc.getString("processedMessage"));
         
         ArrayList<Document> list = (ArrayList<Document>)curDoc.get("calHints");
-        List<CalEvent> eventList = new ArrayList<CalEvent>(list.size());
-        for (Document eventDoc : list) {
-          CalEvent getEvent = new CalEvent();
-          getEvent.setEventID(eventDoc.getLong("eventID"));
-          getEvent.setOrigEmailID(eventDoc.getLong("origEmailID"));
-          getEvent.setHostUserID(eventDoc.getLong("hostUserID"));
-          getEvent.setDate(eventDoc.getString("date"));
-          getEvent.setTime(eventDoc.getString("time"));
-          getEvent.setMeetWithName(eventDoc.getString("meetWithName"));
-          getEvent.setMeetWithAddress(eventDoc.getString("meetWithAddress"));
-          getEvent.setSubject(eventDoc.getString("subject"));
-          getEvent.setEventNotes(eventDoc.getString("eventNotes"));
-          eventList.add(getEvent);
+        if (list.size() > 0) {
+          List<CalEvent> eventList = new ArrayList<CalEvent>(list.size());
+          for (Document eventDoc : list) {
+            CalEvent getEvent = new CalEvent();
+            getEvent.setEventID(eventDoc.getLong("eventID"));
+            getEvent.setOrigEmailID(eventDoc.getLong("origEmailID"));
+            getEvent.setHostUserID(eventDoc.getLong("hostUserID"));
+            getEvent.setDate(eventDoc.getString("date"));
+            getEvent.setTime(eventDoc.getString("time"));
+            getEvent.setMeetWithName(eventDoc.getString("meetWithName"));
+            getEvent.setMeetWithAddress(eventDoc.getString("meetWithAddress"));
+            getEvent.setSubject(eventDoc.getString("subject"));
+            getEvent.setEventNotes(eventDoc.getString("eventNotes"));
+            eventList.add(getEvent);
+          }
+          getEmail.setCalHints(eventList);
         }
-        getEmail.setCalHints(eventList);
       }
     }
     
