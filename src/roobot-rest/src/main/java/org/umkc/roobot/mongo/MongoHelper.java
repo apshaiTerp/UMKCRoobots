@@ -115,11 +115,9 @@ public class MongoHelper {
         getEmail.setMessageBody(curDoc.getString("messageBody"));
         getEmail.setProcessedMessage(curDoc.getString("processedMessage"));
         
-        BasicDBList list = (BasicDBList)curDoc.get("calHints");
+        ArrayList<Document> list = (ArrayList<Document>)curDoc.get("calHints");
         List<CalEvent> eventList = new ArrayList<CalEvent>(list.size());
-        
-        for (Object oDoc : list) {
-          Document eventDoc = (Document)oDoc;
+        for (Document eventDoc : list) {
           CalEvent getEvent = new CalEvent();
           getEvent.setEventID(eventDoc.getLong("eventID"));
           getEvent.setOrigEmailID(eventDoc.getLong("origEmailID"));
@@ -200,8 +198,8 @@ public class MongoHelper {
     MongoCollection collection = mongoDB.getCollection("emails");
     FindIterable iter = collection.find().sort(new BasicDBObject("emailID", -1)).limit(1);
     Document doc = (Document)iter.first();
-    long emailID = doc.getLong("emailID");
-    return emailID;
+    if (doc != null) return doc.getLong("emailID");
+    return 1;
   }
   
   public static long getMaxEventID() {
