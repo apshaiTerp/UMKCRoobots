@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.umkc.roobot.message.SimpleErrorData;
 import org.umkc.roobot.message.SimpleMessageData;
+import org.umkc.roobot.model.CalEvent;
 import org.umkc.roobot.model.Email;
 import org.umkc.roobot.model.User;
 import org.umkc.roobot.mongo.MongoHelper;
@@ -81,6 +82,9 @@ public class EmailController {
     email.setCalHints(parser.getCalHints());
     
     MongoHelper.writeEmail(email);
+    
+    for (CalEvent hint : email.getCalHints())
+      MongoHelper.writeCalHint(hint);
     
     return new SimpleMessageData("Email Delivered", "This email has been received.");
   }
