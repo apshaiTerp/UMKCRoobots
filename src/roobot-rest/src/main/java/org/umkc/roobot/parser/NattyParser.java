@@ -112,7 +112,7 @@ public class NattyParser {
       String suffix = group.getSuffix(textToParse.length());
 
       resultString += prefix + "<a href=\"#\" style=\"text-decoration:none;display:block,inline;\">" + 
-          "<span style=\"white-space:nowrap\" onclick=\"javascript:alert(1)\">" + matchingValue + "</span></a>";
+          "<span style=\"white-space:nowrap\" onclick=\"mycalendarfunc(" + curEvent.getEventID() + ")\">" + matchingValue + "</span></a>";
       
       //If this is the last group, grab the suffix and finish the sentence.
       if (groups.size() == 1) {
