@@ -30,3 +30,6 @@ Our solution comprises the following elements:
 * NLP Date Parsing in Java using the Natty Engine  (We should mention the python stuff here too)
 * Web Client using HTML5, CSS, Javascript, and whatever else we are using
 
+# TODO
+
+Beef this up some more
