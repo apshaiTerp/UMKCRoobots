@@ -26,7 +26,7 @@ Our solution comprises the following elements:
 
 * MongoDB for data storage
 * REST Service written in Java using the Spring Boot Framework.
-* NLP Date Parsing in Java using the Natty Engine  (We should mention the python stuff here too)
+* NLP Date Parsing in Java using the Natty Engine  ( Alternative approach : Python Parser. Didn't end up using it but is still a good way to handle NLP Data Parsing.)
 * Web Client using HTML5, CSS, Javascript, and whatever else we are using
 
 The REST API is documented on the project wiki site [here](https://github.com/apshaiTerp/UMKCRoobots/wiki/REST-API).
