@@ -13,6 +13,41 @@ or you can route it somewhere specific like this:
 mongod --dbpath /home/adam/stuff/mongo/db --port 27017
 (NOTE: Will need to run with sudo on Linux/Ubuntu)
 
+Once mongo is installed, you only need a little bit of prereq data to make sure the server functions correctly.
+I created dummy users for each of us in the system.  You can launch the command line mongo client with the command
+mongo
+
+Here are the commands for inserting those users:
+use roobotdb
+db.users.insert({ "userID": NumberLong(1),
+  "userName": "apshaiterp",
+  "firstName": "Adam",
+  "lastName": "Carter",
+  "emailAddress": "arcbpc@mail.umkc.edu"
+})
+db.users.insert({ "userID": NumberLong(2),
+  "userName": "amylin0183",
+  "firstName": "Amy",
+  "lastName": "Lin",
+  "emailAddress": "clthf@mail.umkc.edu"
+})
+db.users.insert({ "userID": NumberLong(3),
+  "userName": "billjcapps",
+  "firstName": "Bill",
+  "lastName": "Capps",
+  "emailAddress": "bjctgc@mail.umkc.edu"
+})
+db.users.insert({ "userID": NumberLong(4),
+  "userName": "rah59",
+  "firstName": "Raj",
+  "lastName": "Anantharaman",
+  "emailAddress": "rah59@mail.umkc.edu"
+})
+
+That should be all you need.  All other data can be created safely by the REST calls.
+
+----------------------------------------------------------------------------------------------------
+
 The REST service is built with Maven, so to build it yourself, you only need to run the following command:
 mvn clean install
 
@@ -27,3 +62,4 @@ on something like Heroku.  Not sure why the mongo connection is so finicky (It's
 connect, it's the host who refuses).
 
 So, in case we wind up in trouble and have to move the server somewhere else, here's how.
+
