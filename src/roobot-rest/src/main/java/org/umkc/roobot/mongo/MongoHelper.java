@@ -105,7 +105,7 @@ public class MongoHelper {
         getEmail.setProcessedMessage(curDoc.getString("processedMessage"));
         
         ArrayList<Document> list = (ArrayList<Document>)curDoc.get("calHints");
-        if (list.size() > 0) {
+        if ((list != null) && (list.size() > 0)) {
           List<CalEvent> eventList = new ArrayList<CalEvent>(list.size());
           for (Document eventDoc : list) {
             CalEvent getEvent = new CalEvent();
