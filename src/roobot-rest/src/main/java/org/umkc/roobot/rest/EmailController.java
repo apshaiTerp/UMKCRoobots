@@ -83,7 +83,7 @@ public class EmailController {
     
     MongoHelper.writeEmail(email);
     
-    for (CalEvent hint : email.getCalHints())
+    for (CalEvent hint : parser.getCalHints())
       MongoHelper.writeCalHint(hint);
     
     return new SimpleMessageData("Email Delivered", "This email (" + email.getEmailID() + ") has been received.");
