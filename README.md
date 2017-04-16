@@ -30,6 +30,8 @@ Our solution comprises the following elements:
 * NLP Date Parsing in Java using the Natty Engine  (We should mention the python stuff here too)
 * Web Client using HTML5, CSS, Javascript, and whatever else we are using
 
+The REST API is documented on the project wiki site [here](https://github.com/apshaiTerp/UMKCRoobots/wiki/REST-API).
+
 # TODO
 
 Beef this up some more
