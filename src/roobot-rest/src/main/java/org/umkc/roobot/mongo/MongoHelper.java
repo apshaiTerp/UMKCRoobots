@@ -16,6 +16,7 @@ import org.umkc.roobot.model.OutboxEmailHeader;
 import org.umkc.roobot.model.OutboxList;
 import org.umkc.roobot.model.User;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
@@ -137,35 +138,33 @@ public class MongoHelper {
     MongoCollection collection = mongoDB.getCollection("emails");
     Document doc = new Document();
     
-    doc.append("emailID", email.getEmailID());
-    doc.append("sender", email.getSender());
-    if (email.getSenderID() > 0) doc.append("senderID", email.getSenderID());
-    doc.append("recipient", email.getRecipient());
-    if (email.getRecipientID() > 0) doc.append("recipientID", email.getRecipientID());
-    doc.append("subject", email.getSubject());
-    doc.append("dateSent", email.getDateSent().getTime());
-    doc.append("messageBody", email.getMessageBody());
-    doc.append("processedMessage", email.getProcessedMessage());
+    doc.append("emailID", new BsonInt64(email.getEmailID()));
+    doc.append("sender", new BsonString(email.getSender()));
+    if (email.getSenderID() > 0) doc.append("senderID", new BsonInt64(email.getSenderID()));
+    doc.append("recipient", new BsonString(email.getRecipient()));
+    if (email.getRecipientID() > 0) doc.append("recipientID", new BsonInt64(email.getRecipientID()));
+    doc.append("subject", new BsonString(email.getSubject()));
+    doc.append("dateSent", new BsonDateTime(email.getDateSent().getTime()));
+    doc.append("messageBody", new BsonString(email.getMessageBody()));
+    doc.append("processedMessage", new BsonString(email.getProcessedMessage()));
     
-    Document[] events = new Document[email.getCalHints().size()];
-    int pos = 0;
+    BasicDBList list = new BasicDBList();
     for (CalEvent event : email.getCalHints()) {
-      Document bDoc = new Document();
+      BsonDocument bDoc = new BsonDocument();
       
-      bDoc.append("eventID", event.getEventID());
-      bDoc.append("origEmailID", event.getOrigEmailID());
-      bDoc.append("hostUserID", event.getHostUserID());
+      bDoc.append("eventID", new BsonInt64(event.getEventID()));
+      bDoc.append("origEmailID", new BsonInt64(event.getOrigEmailID()));
+      bDoc.append("hostUserID", new BsonInt64(event.getHostUserID()));
       
-      bDoc.append("date", event.getDate() == null ? "" : event.getDate());
-      bDoc.append("time", event.getTime() == null ? "" : event.getTime());
-      bDoc.append("meetWithName", event.getMeetWithName() == null ? "" : event.getMeetWithName());
-      bDoc.append("meetWithAddress", event.getMeetWithAddress() == null ? "" : event.getMeetWithAddress());
-      bDoc.append("subject", event.getSubject() == null ? "" : event.getSubject());
-      bDoc.append("eventNotes", event.getEventNotes() == null ? "" : event.getEventNotes());
-      events[pos] = bDoc;
-      pos++;
+      bDoc.append("date", new BsonString(event.getDate() == null ? "" : event.getDate()));
+      bDoc.append("time", new BsonString(event.getTime() == null ? "" : event.getTime()));
+      bDoc.append("meetWithName", new BsonString(event.getMeetWithName() == null ? "" : event.getMeetWithName()));
+      bDoc.append("meetWithAddress", new BsonString(event.getMeetWithAddress() == null ? "" : event.getMeetWithAddress()));
+      bDoc.append("subject", new BsonString(event.getSubject() == null ? "" : event.getSubject()));
+      bDoc.append("eventNotes", new BsonString(event.getEventNotes() == null ? "" : event.getEventNotes()));
+      list.add(bDoc);
     }
-    doc.append("calHints", events);
+    doc.append("calHints", list);
     
     collection.insertOne(doc);
   }
