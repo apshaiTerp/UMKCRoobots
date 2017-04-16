@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.umkc.roobot</groupId>
+    <artifactId>roobot-rest</artifactId>
+    <version>0.9.0</version>
+    <packaging>war</packaging>
+    
+    <developers>
+        <developer>
+            <id>apshaiTerp</id>
+            <name>Adam Carter</name>
+            <email>apshaiTerp@yahoo.com</email>
+            <roles>
+                <role>owner</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com/apshaiTerp/UMKCRoobots.git</connection>
+        <developerConnection>scm:git:git@github.com/apshaiTerp/UMKCRoobots.git</developerConnection>
+        <url>http://github.com/apshaiTerp/UMKCRoobots</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.2.RELEASE</version>
+    </parent>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <!-- use UTF-8 for everything -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency> 
+            <groupId>com.joestelmach</groupId>
+            <artifactId>natty</artifactId>
+            <version>0.13</version>
+        </dependency>
+
+		    <!-- Test Dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <charset>UTF-8</charset>
+                    <detectLinks>true</detectLinks>
+                    <docencoding>UTF-8</docencoding>
+                    <docfilessubdirs>true</docfilessubdirs>
+                    <source>1.8</source>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                </configuration>
+                <executions>
+                  <execution>
+                    <id>attach-javadocs</id>
+                    <goals>
+                        <goal>jar</goal>
+                        <goal>test-jar</goal>
+                    </goals>
+                  </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/libs-release</url>
+        </repository>
+        <repository>
+            <id>maven</id>
+            <name>Central Maven Repo</name>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>   
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/libs-release</url>
+        </pluginRepository>
+    </pluginRepositories>
+</project>
