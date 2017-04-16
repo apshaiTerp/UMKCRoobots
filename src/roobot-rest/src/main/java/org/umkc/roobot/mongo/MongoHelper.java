@@ -114,6 +114,25 @@ public class MongoHelper {
         getEmail.setDateSent(curDoc.getDate("dateSent"));
         getEmail.setMessageBody(curDoc.getString("messageBody"));
         getEmail.setProcessedMessage(curDoc.getString("processedMessage"));
+        
+        BasicDBList list = (BasicDBList)curDoc.get("calHints");
+        List<CalEvent> eventList = new ArrayList<CalEvent>(list.size());
+        
+        for (Object oDoc : list) {
+          Document eventDoc = (Document)oDoc;
+          CalEvent getEvent = new CalEvent();
+          getEvent.setEventID(eventDoc.getLong("eventID"));
+          getEvent.setOrigEmailID(eventDoc.getLong("origEmailID"));
+          getEvent.setHostUserID(eventDoc.getLong("hostUserID"));
+          getEvent.setDate(eventDoc.getString("date"));
+          getEvent.setTime(eventDoc.getString("time"));
+          getEvent.setMeetWithName(eventDoc.getString("meetWithName"));
+          getEvent.setMeetWithAddress(eventDoc.getString("meetWithAddress"));
+          getEvent.setSubject(eventDoc.getString("subject"));
+          getEvent.setEventNotes(eventDoc.getString("eventNotes"));
+          eventList.add(getEvent);
+        }
+        getEmail.setCalHints(eventList);
       }
     }
     
