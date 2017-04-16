@@ -86,7 +86,7 @@ public class EmailController {
     for (CalEvent hint : email.getCalHints())
       MongoHelper.writeCalHint(hint);
     
-    return new SimpleMessageData("Email Delivered", "This email has been received.");
+    return new SimpleMessageData("Email Delivered", "This email (" + email.getEmailID() + "has been received.");
   }
   
   @RequestMapping(method=RequestMethod.DELETE, produces="application/json;charset=UTF-8")
