@@ -32,7 +32,8 @@ Our solution comprises the following elements:
 The REST API is documented on the project wiki site [here](https://github.com/apshaiTerp/UMKCRoobots/wiki/REST-API).
 
 For alternative approach using Python Parser, a brief documentation on the project wiki site is [here](https://github.com/apshaiTerp/UMKCRoobots/wiki/NLP-Data-Parsing-Alternative-Approach).
-# TODO
 
-Beef this up some more
+## Powerpoint + Video Demo Link
+* [UMKCRoobots PPT](https://docs.google.com/presentation/d/1hqWb3K8zVlHn-dng8v64PgvNoZ9XNZKwi-y3ATCDO5U/edit?userstoinvite=apshaiterp78@gmail.com&ts=58f42c44&actionButton=1#slide=id.p4)
+* [Video Demo]()
 
