@@ -35,5 +35,5 @@ For alternative approach using Python Parser, a brief documentation on the proje
 
 ## Powerpoint + Video Demo Link
 * [UMKCRoobots PPT](https://docs.google.com/presentation/d/1hqWb3K8zVlHn-dng8v64PgvNoZ9XNZKwi-y3ATCDO5U/edit?userstoinvite=apshaiterp78@gmail.com&ts=58f42c44&actionButton=1#slide=id.p4)
-* [Video Demo]()
+* [Video Demo](https://www.youtube.com/watch?v=IuBNoqAEvoI&feature=youtu.be)
 
